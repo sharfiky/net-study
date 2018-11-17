@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
+using System.Net.Mime;
+using System.Reflection.Metadata;
 
 namespace WubbaLubbaDubDub
 {
@@ -11,8 +14,7 @@ namespace WubbaLubbaDubDub
         /// </summary>
         public static string[] SplitToLines(this string text)
         {
-            // У строки есть специальный метод. Давай здесь без регулярок
-            throw new NotImplementedException();
+            return text.Split('\n');
         }
 
         /// <summary>
@@ -20,8 +22,9 @@ namespace WubbaLubbaDubDub
         /// </summary>
         public static string[] SplitToWords(this string line)
         {
+            char[] delimiterChars = { ' ', ',', '.', ':', '\t'};
             // А вот здесь поиграйся с регулярками.
-            throw new NotImplementedException();
+            return line.Split(delimiterChars, StringSplitOptions.RemoveEmptyEntries);
         }
 
         /// <summary>
@@ -31,7 +34,7 @@ namespace WubbaLubbaDubDub
         public static string GetLeftHalf(this string s)
         {
             // у строки есть метод получения подстроки
-            throw new NotImplementedException();
+            return s.Substring(0, s.Length / 2);
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace WubbaLubbaDubDub
         /// </summary>
         public static string GetRightHalf(this string s)
         {
-            throw new NotImplementedException();
+            return s.Substring(s.Length / 2 + 1);
         }
 
         /// <summary>
@@ -49,7 +52,7 @@ namespace WubbaLubbaDubDub
         public static string Replace(this string s, string old, string @new)
         {
             // и такой метод у строки, очевидно, тоже есть
-            throw new NotImplementedException();
+            return s.Replace(old, @new);
         }
 
         /// <summary>
@@ -65,7 +68,11 @@ namespace WubbaLubbaDubDub
                 FYI: локальную функцию можно объявлять даже после строки с return.
                 То же самое можно сделать и для всех оставшихся методов.
             */
-            throw new NotImplementedException();
+            string CharToFFFF(char c)
+            {
+                return "\\u" + ((int) c).ToString("X4");
+            }
+            return string.Join("", s.Select(CharToFFFF));
         }
 
         /// <summary>
@@ -77,7 +84,7 @@ namespace WubbaLubbaDubDub
                 Собрать строку из последовательности строк можно несколькими способами.
                 Один из низ - статический метод Concat. Но ты можешь выбрать любой.
             */
-            throw new NotImplementedException();
+            return string.Join("", s.Reverse());
         }
 
         /// <summary>
@@ -85,12 +92,16 @@ namespace WubbaLubbaDubDub
         /// </summary>
         public static string InverseCase(this string s)
         {
+            char InverseCharCase(char c)
+            {
+                return char.IsLower(c) ? char.ToUpper(c) : char.ToLower(c);
+            }
             /*
                 Здесь тебе помогут статические методы типа char.
                 На минуту задержись здесь и посмотри, какие еще есть статические методы у char.
                 Например, он содержит методы-предикаты для определения категории Юникода символа, что очень удобно.
             */
-            throw new NotImplementedException();
+            return string.Join("", s.Select(InverseCharCase));
         }
 
         /// <summary>
@@ -99,9 +110,14 @@ namespace WubbaLubbaDubDub
         /// </summary>
         public static string ShiftInc(this string s)
         {
-            throw new NotImplementedException();
+            char CharToNext(char c)
+            {
+                return Convert.ToChar((int) c + 1);
+            }
+            return string.Join("", s.Select(CharToNext));
         }
 
+        
 
         #region Чуть посложнее
 
